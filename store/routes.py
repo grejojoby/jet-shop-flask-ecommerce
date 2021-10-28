@@ -120,6 +120,17 @@ def removeFromCart(product_id):
     flash('Your item has been removed from your cart!', 'success')
     return redirect(url_for('cart'))
 
+@app.route("/checkout")
+@login_required
+def checkout():
+    item_to_remove = Cart.query.filter_by(buyer=current_user).all()
+    print(item_to_remove)
+    for item in item_to_remove:
+        db.session.delete(item)
+        db.session.commit()
+    flash('Your purchase is successful!', 'success')
+    return redirect(url_for('home'))
+
 @app.route("/add_product", methods=['GET', 'POST'])
 @login_required
 def add_product():
