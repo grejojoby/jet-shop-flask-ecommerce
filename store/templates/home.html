@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+
+<div class="jumbotron mt-5">
+	<h1 class="display-4">Jet Store</h1>
+	<p class="lead">The Store of Advanced Tech</p>
+
+</div>
+
+<div class="jumbotron mb-5">
+	<div class="row">
+		<h2 class="display-4">OUR PRODUCTS</h2>
+		<h4>Have a look at our great products.</h4>
+		<div class="col-12 mt-3">
+			<div class="row">
+				<table class="table mt-5" style="font-size: 1.2em;">
+					<tr>
+						<th>Product Name</th>
+						<th style="text-align: center;">Add to Cart</th>
+					</tr>
+					{% for product in products %}
+					<tr>
+						<td style="text-align: left;">{{ product.name }}
+						<br><span class="text-muted">{{ product.description }}</span></td>
+						<td><a href="/addToCart/{{product.id}}">Add to cart</a></td>
+					</tr>
+					{% endfor %}
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endblock content %}
