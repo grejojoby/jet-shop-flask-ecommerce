@@ -7,13 +7,13 @@
 	<table class="table mt-5">
 		<tr>
 			<th>Product Name</th>
-			<th style="text-align: center;">Add to Cart</th>
+			<th style="text-align: center;">Delete</th>
 		</tr>
 		{% for product in products %}
 		<tr>
 			<td style="text-align: left;width: 60%;"><b>{{ product.name }}</b>
 			<br>{{ product.description|truncate(210, True, '...') }}</td>
-			<td style="text-align: center;width: 20%;"><a href="/addToCart/{{product.id}}">Add to cart</a></td>
+			<td style="text-align: center;width: 20%;"><a href="/product/delete/{{product.id}}">Delete</a></td>
 		</tr>
 		{% endfor %}
 	</table>

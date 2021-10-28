@@ -120,29 +120,41 @@ def removeFromCart(product_id):
     flash('Your item has been removed from your cart!', 'success')
     return redirect(url_for('cart'))
 
-@app.route("/product_add", methods=['GET', 'POST'])
-def product_add():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = ProductForm()
-    if form.validate_on_submit():
-        product = Products(name=form.name.data,price=form.price.data,description=form.description.data)
-        db.session.add(product)
-        db.session.commit()
-        flash('Product added successfully!', 'success')
-        return redirect(url_for('select_products'))
-        
-    return render_template('add_product.html', title='Add Product', form=form)
-
 @app.route("/add_product", methods=['GET', 'POST'])
+@login_required
 def add_product():
-    form = ProductForm()
-    if form.validate_on_submit():
-        product = Products(name=form.name.data,price=form.price.data,description=form.description.data)
-        db.session.add(product)
-        db.session.commit()
-        flash('Product added successfully!', 'success')
-        return redirect(url_for('select_products'))
+    if current_user.is_authenticated and current_user.email == "admin@jetstore.com":
         
-    return render_template('add_product.html', title='Add Product', form=form)
+        form = ProductForm()
+        if form.validate_on_submit():
+            product = Products(name=form.name.data,price=form.price.data,description=form.description.data)
+            db.session.add(product)
+            db.session.commit()
+            flash('Product added successfully!', 'success')
+            return redirect(url_for('select_products'))
+        
+        return render_template('add_product.html', title='Add Product', form=form)
 
+    flash('You do not have access to the page!', 'danger')
+    return redirect(url_for('home'))
+
+@app.route("/delete_product", methods=['GET', 'POST'])
+@login_required
+def delete_product():
+    if current_user.is_authenticated and current_user.email == "admin@jetstore.com":
+        noOfItems = getLoginDetails()
+        products = Products.query.all()
+        return render_template('delete_product.html', products=products,noOfItems=noOfItems)
+        
+    flash('You do not have access to the page!', 'danger')
+    return redirect(url_for('home'))
+
+@app.route("/product/delete/<int:product_id>")
+@login_required
+def remove_product(product_id):
+    if current_user.is_authenticated and current_user.email == "admin@jetstore.com":
+        item_to_remove = Products.query.filter_by(id=product_id).first()
+        db.session.delete(item_to_remove)
+        db.session.commit()
+        flash('The product have been removed from the database!', 'success')
+        return redirect(url_for('delete_product'))

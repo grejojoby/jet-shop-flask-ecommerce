@@ -34,8 +34,18 @@
         <div class="collapse navbar-collapse" id="navbarToggle">
           <div class="navbar-nav mr-auto">
             <a class="nav-item nav-link" href="{{ url_for('select_products') }}">Products</a>
-
           </div>
+          {% if current_user.is_authenticated %}
+            {% if current_user.email == "admin@jetstore.com" %}
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link" href="{{ url_for('add_product') }}">Add Product</a>
+            </div>
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link" href="{{ url_for('delete_product') }}">Delete Product</a>
+            </div>
+            {% endif %}
+          {% endif %}
+
 
         </div>
         <div class="navbar-nav nostack" style="display: inline;">
